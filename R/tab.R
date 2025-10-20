@@ -44,22 +44,22 @@ tab <- function(var, decimals = 0, drop_na = TRUE) {
   )
 
   # --- weighted one-way table ---
-  # use formula ~ varname
   fml <- stats::as.formula(paste0("~", varname))
   tab_w <- survey::svytable(fml, ces_design)
 
-  # to data frame
+  # convert to data frame
   df <- as.data.frame(tab_w)
-  names(df) <- c("category", "count")  # consistently name columns
+  names(df) <- c("category", "count")
 
   # optionally drop NA category
   if (drop_na) {
     df <- df[!is.na(df$category), , drop = FALSE]
   }
 
-  # percentages
+  # percentages and rounding
   total <- sum(df$count)
   df$percent <- (df$count / total) * 100
+  df$count <- ceiling(df$count)   # 🔹 round counts UP to nearest integer
 
   # --- format with gt ---
   gt::gt(df) |>
