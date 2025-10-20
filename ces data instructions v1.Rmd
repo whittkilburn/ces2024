@@ -1,0 +1,60 @@
+---
+title: "accessing and tabulating survey questions in the 2024 CES "
+author: "Kilburn"
+date: "2025-09-24"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+The 2024 CES survey  is a nationally representative survey of adult Americans, interviewed in fall 2024 and again in the winter. You have access to the codebook for the survey, which lists the questions. In this package you can tabulate a variable and then using another function, cross-tabulate a variable, adding row or column percentages.  
+
+Install it. Then `library(ces2024)`:  
+
+```{r eval=FALSE, message=FALSE}
+remotes::install_github("whittkilburn/ces2024")
+```
+
+```{r}
+library(ces2024)
+```
+
+Load the dataset with 
+
+```{r}
+data(ces24)
+```
+
+To find the names of survey questions (variables or columns in the dataset), consult the codebook. To list the names of all the variables in the dataset, use `names(ces24)`.
+
+Output isn't shown, but `names(ces24)` will list all the variables: 
+
+```{r eval=FALSE}
+names(ces24)
+```
+
+The variable identifier (think column number in a spreadsheet) identifies a specific survey question.  The codebook is a little sketchy at times, but generally under the question wording you can find the variable name in a grey text.  
+
+ 
+To tabulate a question, enter `tab()` and the name of the variable --- without quotes `tab(educ)`.
+
+```{r }
+tab(educ)
+```
+The frequencies and percentages of the responses will appear in the Viewer pane. 
+
+The function `xtab()` will tabulate a variable with another -- a cross tabulation.  The basic syntax is `xtab(row_variable, column_variable)`. To cross tabulate party identification and education: 
+
+```{r}
+xtab(pid7, educ)
+```
+
+To add row or column percentages, just add `row` or `column` to the end. For example, to do column percentages: 
+
+```{r}
+xtab(pid7, educ, column)
+```
